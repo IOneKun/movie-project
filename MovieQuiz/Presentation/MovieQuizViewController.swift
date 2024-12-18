@@ -14,6 +14,9 @@ final class MovieQuizViewController: UIViewController {
     @IBAction private func noButtonClicked(_ sender: Any) {
     }
     
+    private var currentQuestionIndex = 0
+    private var correctAnswers = 0
+    
     private struct QuizQuestion {
         //строка с названием фильма,
         //совпадает с названием картинки афиши фильма в Assets
@@ -65,8 +68,11 @@ final class MovieQuizViewController: UIViewController {
     
     // для состояния "Вопрос показан"
     private struct QuizStepViewModel {
+        // картинка с афишей фильма с типом UIImage
         let image: UIImage
+        // вопрос о рейтинге квиза
         let question: String
+        // строка с порядковым номером этого вопроса (ex. "1/10")
         let questionNumber: String
     }
     
@@ -77,7 +83,19 @@ final class MovieQuizViewController: UIViewController {
       let buttonText: String
     }
     
+    private func convert(model: QuizQuestion) -> QuizStepViewModel {
+        let questionStep = QuizStepViewModel(
+            image: UIImage(named:model.image) ?? UIImage(),
+            question: model.text,
+            questionNumber: "\(currentQuestionIndex + 1)/\(questions.count)")
+        return questionStep
+    }
     
+    private func show(quiz step: QuizStepViewModel) {
+        imageView.image = step.image
+        textLabel.text = step.question
+        counterLabel.text = step.questionNumber
+    }
     /*
      Mock-данные
      
