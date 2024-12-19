@@ -3,6 +3,7 @@ final class MovieQuizViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        show(quiz: convert(model:questions[currentQuestionIndex]))
     }
     
     @IBOutlet private var imageView: UIImageView!
@@ -10,8 +11,15 @@ final class MovieQuizViewController: UIViewController {
     @IBOutlet private var counterLabel: UILabel!
     
     @IBAction private func yesButtonClicked(_ sender: Any) {
+        let currentQuestion = questions[currentQuestionIndex]
+        let givenAnswer = true
+        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
+    
     @IBAction private func noButtonClicked(_ sender: Any) {
+        let currentQuestion = questions[currentQuestionIndex]
+        let givenAnswer = true
+        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
     
     private var currentQuestionIndex = 0
@@ -96,6 +104,38 @@ final class MovieQuizViewController: UIViewController {
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
     }
+    
+    // приватный метод, который меняет цвет рамки
+    // принимает на вход булевое значение и ничего не возвращает
+    private func showAnswerResult(isCorrect: Bool) {
+        imageView.layer.masksToBounds = true
+        imageView.layer.borderWidth = 8
+        imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
+        // метод красит рамку
+        // запускаем задачу через 1 секунду c помощью диспетчера задач
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+           // код, который мы хотим вызвать через 1 секунду
+           self.showNextQuestionOrResults()
+        }
+    }
+    
+    private func showNextQuestionOrResults() {
+        if currentQuestionIndex == questions.count - 1 {
+            // идём в состояние "Результат квиза"
+        } else {
+            currentQuestionIndex += 1
+            // идём в состояние "Вопрос показан"
+            
+            let nextQuestion = questions[currentQuestionIndex]
+            let viewModel = convert(model: nextQuestion)
+            
+            show(quiz: viewModel)
+        }
+    }
+    
+
+    
+    
     /*
      Mock-данные
      
