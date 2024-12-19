@@ -86,9 +86,9 @@ final class MovieQuizViewController: UIViewController {
     
     // для состояния "Результат квиза"
     private struct QuizResultsViewModel {
-      let title: String
-      let text: String
-      let buttonText: String
+        let title: String
+        let text: String
+        let buttonText: String
     }
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
@@ -108,20 +108,29 @@ final class MovieQuizViewController: UIViewController {
     // приватный метод, который меняет цвет рамки
     // принимает на вход булевое значение и ничего не возвращает
     private func showAnswerResult(isCorrect: Bool) {
+        if isCorrect {
+            correctAnswers += 1
+        }
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
         // метод красит рамку
         // запускаем задачу через 1 секунду c помощью диспетчера задач
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-           // код, который мы хотим вызвать через 1 секунду
-           self.showNextQuestionOrResults()
+            // код, который мы хотим вызвать через 1 секунду
+            self.showNextQuestionOrResults()
         }
     }
     
     private func showNextQuestionOrResults() {
         if currentQuestionIndex == questions.count - 1 {
             // идём в состояние "Результат квиза"
+            let text = "Ваш результат: \(correctAnswers)/10"
+            let viewModel = QuizResultsViewModel(
+                title: "Этот раунд окончен!",
+                text: text,
+                buttonText: "Сыграть еще раз")
+            show(quiz: viewModel)
         } else {
             currentQuestionIndex += 1
             // идём в состояние "Вопрос показан"
@@ -133,8 +142,26 @@ final class MovieQuizViewController: UIViewController {
         }
     }
     
-
+    private func show(quiz result:QuizResultsViewModel) {
+        
+    let alert = UIAlertController(
+        title: "Этот раунд oкончен!",
+        message: "Ваш результат ???",
+        preferredStyle: .alert)
     
+    // константа с кнопкой для системного алерта
+    let action = UIAlertAction(title: result.buttonText, style: .default) { _ in
+        self.currentQuestionIndex = 0
+        self.correctAnswers = 0
+        
+        let firstQuestion = self.questions[self.currentQuestionIndex] // 2
+        let viewModel = self.convert(model: firstQuestion)
+        self.show(quiz: viewModel)
+    }
+    alert.addAction(action)
+    
+    self.present(alert, animated: true, completion: nil)
+}
     
     /*
      Mock-данные
