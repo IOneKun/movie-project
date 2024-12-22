@@ -125,9 +125,7 @@ final class MovieQuizViewController: UIViewController {
         if isCorrect {
             correctAnswers += 1
         }
-        imageView.layer.cornerRadius = 20
-        imageView.layer.masksToBounds = true
-        imageView.layer.borderWidth = 8
+        
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
         // метод красит рамку
         // запускаем задачу через 1 секунду c помощью диспетчера задач
