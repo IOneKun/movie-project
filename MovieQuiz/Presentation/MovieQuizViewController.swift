@@ -129,8 +129,9 @@ final class MovieQuizViewController: UIViewController {
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
         // метод красит рамку
         // запускаем задачу через 1 секунду c помощью диспетчера задач
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             // код, который мы хотим вызвать через 1 секунду
+            guard let self = self else { return }
             self.showNextQuestionOrResults()
         }
     }
@@ -153,7 +154,7 @@ final class MovieQuizViewController: UIViewController {
                 buttonText: "Сыграть еще раз")
             show(quiz: viewModel)
         } else {
-            resetImageViewBorder()
+            
             currentQuestionIndex += 1
             
             // идём в состояние "Вопрос показан"
@@ -173,23 +174,22 @@ final class MovieQuizViewController: UIViewController {
             preferredStyle: .alert)
         
         // константа с кнопкой для системного алерта
-        let action = UIAlertAction(title: result.buttonText, style: .default) { _ in
+        let action = UIAlertAction(title: result.buttonText, style: .default) { [weak self] _ in
+            guard let self = self else { return }
             self.currentQuestionIndex = 0
-            self.correctAnswers = 0
+            
             
             let firstQuestion = self.questions[self.currentQuestionIndex] // 2
             let viewModel = self.convert(model: firstQuestion)
             self.show(quiz: viewModel)
-            self.resetImageViewBorder()
+           
         }
         alert.addAction(action)
         
         self.present(alert, animated: true, completion: nil)
     }
 
-    private func resetImageViewBorder() {
-        imageView.layer.borderColor = UIColor.clear.cgColor
-    }
+    
     /*
      Mock-данные
      
