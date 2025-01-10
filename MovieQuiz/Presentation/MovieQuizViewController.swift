@@ -22,6 +22,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
         super.viewDidLoad()
+        print(Bundle.main.bundlePath)
         
         let questionFactory = QuestionFactory()
         questionFactory.setup(delegate: self)
@@ -106,40 +107,27 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
         
-        
         if currentQuestionIndex == questionsAmount - 1 {
-            // идём в состояние "Результат квиза"
-            let text = "Ваш результат: \(correctAnswers)/10"
-            let viewModel = QuizResultsViewModel(
+            let alertModel = AlertModel(
                 title: "Этот раунд окончен!",
-                text: text,
-                buttonText: "Сыграть еще раз")
-            show(quiz: viewModel)
-        } else {
-            
+                massage: "Ваш результат: \(correctAnswers)/10",
+                buttonText: "Сыграть еще раз",
+                completion: { [weak self] in
+                    self?.restartQuiz()
+                }
+                )
+            AlertPresenter.showAlert(on: self, with: alertModel)
+            } else {
+        
             currentQuestionIndex += 1
             questionFactory.requestNextQuestion()
-            
-        }
+            }
+    }
+    private func restartQuiz() {
+        currentQuestionIndex = 0
+        correctAnswers = 0
+        questionFactory.requestNextQuestion()
     }
     
-    private func show(quiz result:QuizResultsViewModel) {
-        let alert = UIAlertController(
-            title: result.title,
-            message: result.text,
-            preferredStyle: .alert)
-        
-        let action = UIAlertAction(title: result.buttonText, style: .default) { [weak self] _ in
-            guard let self = self else { return }
-            self.currentQuestionIndex = 0
-            self.correctAnswers = 0
-            
-            self.questionFactory.requestNextQuestion()
-        }
-        
-        alert.addAction(action)
-        
-        self.present(alert, animated: true, completion: nil)
-    }
 }
 
