@@ -15,6 +15,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private let questionsAmount = 10
     private var questionFactory: QuestionFactoryProtocol = QuestionFactory()
     private var currentQuestion: QuizQuestion?
+    private var statisticService: StatisticServiceProtocol!
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -23,6 +24,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         imageView.layer.borderWidth = 8
         super.viewDidLoad()
         print(Bundle.main.bundlePath)
+        
+        statisticService = StatisticService()
         
         let questionFactory = QuestionFactory()
         questionFactory.setup(delegate: self)
@@ -90,8 +93,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         }
         
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
-        // метод красит рамку
-        // запускаем задачу через 1 секунду c помощью диспетчера задач
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             // код, который мы хотим вызвать через 1 секунду
             guard let self = self else { return }
@@ -100,6 +101,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func showNextQuestionOrResults() {
+        resetBorder()
         yesButton.isEnabled = true
         noButton.isEnabled = true
         
@@ -108,9 +110,17 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         imageView.layer.borderWidth = 8
         
         if currentQuestionIndex == questionsAmount - 1 {
+            
+            statisticService.store(correct: correctAnswers, total: questionsAmount)
+            
+            let massage = "Ваш результат: \(correctAnswers)/\(questionsAmount)\n" +
+            "Количество сыгранных квизов: \(statisticService.gamesCount)\n" +
+            "Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%\n" +
+            "Луший результат: \(statisticService.bestGame.correct)/\(statisticService.bestGame.total) (\(statisticService.bestGame.date.dateTimeString))"
+            
             let alertModel = AlertModel(
                 title: "Этот раунд окончен!",
-                massage: "Ваш результат: \(correctAnswers)/10",
+                massage: massage,
                 buttonText: "Сыграть еще раз",
                 completion: { [weak self] in
                     self?.restartQuiz()
@@ -127,6 +137,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         currentQuestionIndex = 0
         correctAnswers = 0
         questionFactory.requestNextQuestion()
+    }
+    
+    private func resetBorder() {
+        imageView.layer.borderColor = UIColor.ypBlack.cgColor
     }
     
 }
