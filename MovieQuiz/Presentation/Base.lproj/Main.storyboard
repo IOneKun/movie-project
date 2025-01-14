@@ -108,9 +108,9 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="NoButton" destination="zMx-7k-F2G" id="GJ0-6A-OzP"/>
                         <outlet property="counterLabel" destination="i6T-1t-MHB" id="yQF-3S-8yS"/>
                         <outlet property="imageView" destination="74u-v7-vI4" id="eEr-yt-8on"/>
+                        <outlet property="noButton" destination="zMx-7k-F2G" id="KK2-D0-HSv"/>
                         <outlet property="textLabel" destination="q5v-Fe-moP" id="IOy-Um-AXI"/>
                         <outlet property="yesButton" destination="kNv-T5-Org" id="qeU-60-hEE"/>
                     </connections>
