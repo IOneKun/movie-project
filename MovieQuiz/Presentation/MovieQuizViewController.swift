@@ -8,6 +8,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private var counterLabel: UILabel!
     @IBOutlet private var yesButton: UIButton!
     @IBOutlet private var noButton: UIButton!
+    @IBOutlet private var activityIndicator: UIActivityIndicatorView!
     
     //MARK: - Variables
     private var currentQuestionIndex = 0
@@ -125,13 +126,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                 completion: { [weak self] in
                     self?.restartQuiz()
                 }
-                )
+            )
             AlertPresenter.showAlert(on: self, with: alertModel)
-            } else {
-        
+        } else {
+            
             currentQuestionIndex += 1
             questionFactory.requestNextQuestion()
-            }
+        }
     }
     private func restartQuiz() {
         currentQuestionIndex = 0
@@ -143,5 +144,34 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         imageView.layer.borderColor = UIColor.ypBlack.cgColor
     }
     
+    private func showLoadingIndicator() {
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+    }
+    
+    private func showNetworkError(message: String) {
+        hideLoadingIndicator()
+        
+        let alertModel = AlertModel(
+            title: "Ошибка",
+            massage: message,
+            buttonText: "Попробовать еще раз") { [weak self] in
+                guard let self = self else { return }
+                
+                self.currentQuestionIndex = 0
+                self.correctAnswers = 0
+                
+                self.questionFactory.requestNextQuestion()
+            }
+        AlertPresenter.showAlert(on: self, with: alertModel)
+    }
+    
+    func didLoadDataFromServer() {
+        activityIndicator.isHidden = true
+        questionFactory.requestNextQuestion()
+    }
+    
+    func didFailToLoadData(with error: Error) {
+        showNetworkError(message: error.localizedDescription)
+    }
 }
-
