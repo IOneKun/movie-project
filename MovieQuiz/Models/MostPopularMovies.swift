@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct MostPopularMovies: Decodable {
+struct MostPopularMovies: Codable {
     let errorMessage: String
     let items: [MostPopularMovie]
 }
 
-struct MostPopularMovie: Decodable {
+struct MostPopularMovie: Codable {
     let title: String
     let rating: String
     let imageURL: URL

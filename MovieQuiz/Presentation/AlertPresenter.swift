@@ -8,11 +8,11 @@
 import Foundation
 import UIKit
 
-class AlertPresenter {
+final class AlertPresenter {
     static func showAlert(on viewController: UIViewController, with model: AlertModel) {
         let alert = UIAlertController(
             title: model.title,
-            message: model.massage,
+            message: model.message,
             preferredStyle: .alert)
         
         let action = UIAlertAction(title: model.buttonText, style: .default) { _ in

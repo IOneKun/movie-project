@@ -14,7 +14,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private var currentQuestionIndex = 0
     private var correctAnswers = 0
     private let questionsAmount = 10
-    private var questionFactory: QuestionFactoryProtocol = QuestionFactory()
+    private var questionFactory: QuestionFactoryProtocol!
     private var currentQuestion: QuizQuestion?
     private var statisticService: StatisticServiceProtocol!
     
@@ -28,15 +28,16 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         
         statisticService = StatisticService()
         
-        let questionFactory = QuestionFactory()
-        questionFactory.setup(delegate: self)
-        self.questionFactory = questionFactory
+        questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         
-        questionFactory.requestNextQuestion()
+        
+        showLoadingIndicator()
+        questionFactory.loadData()
     }
     
     //MARK: -QuestionFactoryDelegate
     func didReceiveNextQuestion(question: QuizQuestion?) {
+        
         guard let question = question else {
             return
         }
@@ -76,7 +77,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     //MARK: - PrivateFunctions
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
         let questionStep = QuizStepViewModel(
-            image: UIImage(named:model.image) ?? UIImage(),
+            image: UIImage(data:model.image) ?? UIImage(),
             question: model.text,
             questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
         return questionStep
@@ -114,14 +115,17 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             
             statisticService.store(correct: correctAnswers, total: questionsAmount)
             
-            let massage = "Ваш результат: \(correctAnswers)/\(questionsAmount)\n" +
-            "Количество сыгранных квизов: \(statisticService.gamesCount)\n" +
-            "Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%\n" +
-            "Луший результат: \(statisticService.bestGame.correct)/\(statisticService.bestGame.total) (\(statisticService.bestGame.date.dateTimeString))"
+            let message = """
+            Ваш результат: \(correctAnswers)/\(questionsAmount)
+            Количество сыгранных квизов: \(statisticService.gamesCount)
+            Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))
+            Луший результат: \(statisticService.bestGame.correct)/\(statisticService.bestGame.total) \(statisticService.bestGame.date.dateTimeString)
+            """
+            
             
             let alertModel = AlertModel(
                 title: "Этот раунд окончен!",
-                massage: massage,
+                message: message,
                 buttonText: "Сыграть еще раз",
                 completion: { [weak self] in
                     self?.restartQuiz()
@@ -149,26 +153,30 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         activityIndicator.startAnimating()
     }
     
+    private func hideLoadingIndicator() {
+        activityIndicator.isHidden = true
+    }
+    
     private func showNetworkError(message: String) {
         hideLoadingIndicator()
         
         let alertModel = AlertModel(
             title: "Ошибка",
-            massage: message,
+            message: message,
             buttonText: "Попробовать еще раз") { [weak self] in
                 guard let self = self else { return }
                 
                 self.currentQuestionIndex = 0
                 self.correctAnswers = 0
                 
-                self.questionFactory.requestNextQuestion()
+                self.questionFactory?.requestNextQuestion()
             }
         AlertPresenter.showAlert(on: self, with: alertModel)
     }
     
     func didLoadDataFromServer() {
         activityIndicator.isHidden = true
-        questionFactory.requestNextQuestion()
+        questionFactory?.requestNextQuestion()
     }
     
     func didFailToLoadData(with error: Error) {
