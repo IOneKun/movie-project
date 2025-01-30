@@ -9,7 +9,7 @@ import Foundation
 
 struct AlertModel {
     let title: String
-    let massage: String
+    let message: String
     let buttonText: String
     let completion: () -> Void
 }
