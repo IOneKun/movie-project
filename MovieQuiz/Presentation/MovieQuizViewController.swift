@@ -11,7 +11,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private var activityIndicator: UIActivityIndicatorView!
     
     //MARK: - Variables
-    var correctAnswers: Int = 0
+    
     private var questionFactory: QuestionFactoryProtocol!
     private var statisticService: StatisticServiceProtocol!
     private let presenter = MovieQuizPresenter()
@@ -38,6 +38,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     //MARK: -QuestionFactoryDelegate
+    func showNextQuestionOrResults() {
+        presenter.showNextQuestionOrResults()
+    }
+    
     func didReceiveNextQuestion(question: QuizQuestion?) {
         presenter.didReceiveNextQuestion(question: question)
     }
@@ -109,35 +113,17 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         AlertPresenter.showAlert(on: self, with: model)
     }
     
-    func showNextQuestionOrResults() {
-        if presenter.isLastQuestion() {
-            let text = "Вы ответили на \(presenter.correctAnswers) из 10, попробуйте еще раз!"
-            
-            let viewModel = QuizResultsViewModel(
-                title: "Этот раунд окончен!",
-                text: text,
-                buttonText: "Сыграть ещё раз")
-            self.show(quiz: viewModel)
-        } else {
-            presenter.switchToNextQuestion()
-            questionFactory?.requestNextQuestion()
-        }
-    }
-    
     func showAnswerResult(isCorrect: Bool) {
-        if isCorrect {
-            correctAnswers += 1
-        }
+        presenter.didAnswer(isCorrectAnswer: isCorrect)
+        
         noButton.isEnabled = false
         yesButton.isEnabled = false
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
-            self.presenter.correctAnswers = self.correctAnswers
             self.presenter.questionFactory = self.questionFactory
             self.showNextQuestionOrResults()
         }
-        
     }
     
     private func showNetworkError(message: String) {
