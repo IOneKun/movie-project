@@ -7,7 +7,8 @@
 
 import UIKit
 
-final class MovieQuizPresenter {
+final class MovieQuizPresenter: QuestionFactoryDelegate {
+    
     var questionFactory: QuestionFactoryProtocol?
     var correctAnswers = 0
     let questionsAmount: Int = 10
@@ -15,6 +16,29 @@ final class MovieQuizPresenter {
     var currentQuestion: QuizQuestion?
     weak var viewController: MovieQuizViewController?
     
+    init(viewController: MovieQuizViewController) {
+        self.viewController = viewController
+        
+        questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
+        questionFactory?.loadData()
+    }
+    
+   //MARK: - QuestionFactoryDelegate
+    
+    func didFailToLoadData(with error: Error) {
+        let message = error.localizedDescription
+        viewController?.showNetworkError(message: message)
+    }
+    func didLoadDataFromServer() {
+        viewController?.hideLoadingIndicator()
+        questionFactory?.requestNextQuestion()
+    }
+    
+    func didFailToLoadImage(for movie: MostPopularMovie) {
+        viewController?.showNetworkError(message: "Не удалось загрузить изображение для фильма \(movie.title). Пожалуйста, попробуйте еще раз")
+    }
+    
+//MARK: - Functions
     
     func isLastQuestion() -> Bool {
         currentQuestionIndex == questionsAmount - 1
@@ -23,6 +47,7 @@ final class MovieQuizPresenter {
     func restartGame() {
         currentQuestionIndex = 0
         correctAnswers = 0
+        questionFactory?.requestNextQuestion()
     }
     
     func switchToNextQuestion() {
@@ -86,6 +111,5 @@ final class MovieQuizPresenter {
             questionFactory?.requestNextQuestion()
         }
     }
-    
-    
+
 }

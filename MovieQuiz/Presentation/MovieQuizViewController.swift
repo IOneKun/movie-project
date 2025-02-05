@@ -1,5 +1,5 @@
 import UIKit
-final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
+final class MovieQuizViewController: UIViewController {
     
     //MARK: - IBOutlets
     
@@ -11,10 +11,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private var activityIndicator: UIActivityIndicatorView!
     
     //MARK: - Variables
-    
-    private var questionFactory: QuestionFactoryProtocol!
     private var statisticService: StatisticServiceProtocol!
-    private let presenter = MovieQuizPresenter()
+    private var presenter: MovieQuizPresenter!
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -27,36 +25,17 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         
         activityIndicator.hidesWhenStopped = true
         
-        presenter.viewController = self
-        statisticService = StatisticService()
+        presenter = MovieQuizPresenter(viewController: self)
         
-        questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
+        statisticService = StatisticService()
         
         
         activityIndicator.startAnimating()
-        questionFactory.loadData()
     }
     
-    //MARK: -QuestionFactoryDelegate
+
     func showNextQuestionOrResults() {
         presenter.showNextQuestionOrResults()
-    }
-    
-    func didReceiveNextQuestion(question: QuizQuestion?) {
-        presenter.didReceiveNextQuestion(question: question)
-    }
-    
-    func didLoadDataFromServer() {
-        activityIndicator.stopAnimating()
-        questionFactory?.requestNextQuestion()
-    }
-    
-    func didFailToLoadData(with error: Error) {
-        showNetworkError(message: error.localizedDescription)
-    }
-    
-    func didFailToLoadImage(for movie: MostPopularMovie) {
-        showNetworkError(message: "Не удалось загрузить изображение для фильма \(movie.title). Пожалуйста, попробуйте еще раз")
     }
     
     //MARK: - IBActions
@@ -107,7 +86,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             
             self.presenter.restartGame()
             
-            self.questionFactory?.requestNextQuestion()
         }
         
         AlertPresenter.showAlert(on: self, with: model)
@@ -121,12 +99,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
-            self.presenter.questionFactory = self.questionFactory
-            self.showNextQuestionOrResults()
+            self.presenter.showNextQuestionOrResults()
         }
     }
     
-    private func showNetworkError(message: String) {
+     func showNetworkError(message: String) {
         activityIndicator.stopAnimating()
         
         let alertModel = AlertModel(
@@ -137,9 +114,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                 
                 self.presenter.restartGame()
                 
-                questionFactory.loadData()
             }
         AlertPresenter.showAlert(on: self, with: alertModel)
+    }
+    
+    func hideLoadingIndicator() {
+        activityIndicator.isHidden = true
     }
 }
 
