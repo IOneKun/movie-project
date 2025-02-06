@@ -22,7 +22,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         super.viewDidLoad()
         print(Bundle.main.bundlePath)
         
-        presenter = MovieQuizPresenter(viewController: self)n
+        presenter = MovieQuizPresenter(viewController: self)
     }
     
     //MARK: - IBActions
