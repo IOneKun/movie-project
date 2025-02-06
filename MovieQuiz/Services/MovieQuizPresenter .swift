@@ -127,6 +127,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         } else {
             self.switchToNextQuestion()
             questionFactory?.requestNextQuestion()
+            viewController?.startActivityIndicator()
         }
     }
     
