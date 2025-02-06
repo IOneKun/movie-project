@@ -22,11 +22,6 @@
 		6F76E1322D299A2200F75F99 /* QuizResultsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F76E1312D299A2200F75F99 /* QuizResultsViewModel.swift */; };
 		6F76E1342D299A3D00F75F99 /* QuizQuestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F76E1332D299A3D00F75F99 /* QuizQuestion.swift */; };
 		6F84E7A12D42B18B000E9388 /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F84E7A02D42B18B000E9388 /* NetworkClient.swift */; };
-<<<<<<< HEAD
-=======
-		6F84E7A32D42D882000E9388 /* MostPopularMovies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F84E7A22D42D882000E9388 /* MostPopularMovies.swift */; };
-		6F84E7A52D42D9F4000E9388 /* MoviesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F84E7A42D42D9F4000E9388 /* MoviesLoader.swift */; };
->>>>>>> main
 		6F98E80E2D0DBAA70062968B /* YS Display-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F98E80D2D0DBAA70062968B /* YS Display-Medium.ttf */; };
 		6F98E80F2D0DBAA70062968B /* YS Display-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F98E80C2D0DBAA70062968B /* YS Display-Bold.ttf */; };
 		6FB12F262D33DFF500BB89E0 /* StatisticServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB12F252D33DFF500BB89E0 /* StatisticServiceProtocol.swift */; };
@@ -513,11 +508,8 @@
 				6F5F90132D4C483500C51E2A /* MostPopularMovies.swift in Sources */,
 				6FB12F282D33E27B00BB89E0 /* GameResult.swift in Sources */,
 				6F84E7A12D42B18B000E9388 /* NetworkClient.swift in Sources */,
-<<<<<<< HEAD
+
 				6F5F8FDD2D4C23E900C51E2A /* MoviesLoader.swift in Sources */,
-=======
-				6F84E7A52D42D9F4000E9388 /* MoviesLoader.swift in Sources */,
->>>>>>> main
 				6F2AD4D12D2E7F1700B51339 /* QuestionFactoryDelegate.swift in Sources */,
 				AD1ABAB62831907B00B3E448 /* MovieQuizViewController.swift in Sources */,
 				6F76E1302D299A0600F75F99 /* QuizStepViewModel.swift in Sources */,
