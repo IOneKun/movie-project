@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-final class AlertPresenter {
+final class AlertPresenter {D
     
     static func showAlert(on viewController: UIViewController, with model: AlertModel) {
         

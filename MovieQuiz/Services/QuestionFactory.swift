@@ -9,6 +9,7 @@ import Foundation
 
 final class QuestionFactory: QuestionFactoryProtocol {
     
+    
     private let moviesLoader: MoviesLoading
     weak var delegate: QuestionFactoryDelegate?
     
@@ -120,6 +121,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
             }
             
             let text = "Рейтинг этого фильма \(randomOperator) чем \(String(format: "%.1f", randomRating))?"
+
             
             let question = QuizQuestion(image: imageData,
                                         text: text,
