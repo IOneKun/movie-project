@@ -55,7 +55,7 @@ class MoviesLoaderTests: XCTestCase {
     }
 }
 
-// Тестовая реализация сетевого клиента
+
 struct StubNetworkClient: NetworkRouting {
     
     enum TestError: Error {

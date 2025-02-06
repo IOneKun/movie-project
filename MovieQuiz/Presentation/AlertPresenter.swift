@@ -10,14 +10,14 @@ import UIKit
 
 final class AlertPresenter {
     
-     static func showAlert(on viewController: UIViewController, with model: AlertModel) {
+    static func showAlert(on viewController: UIViewController, with model: AlertModel) {
         
         let alert = UIAlertController(
             title: model.title,
             message: model.message,
             preferredStyle: .alert)
         alert.view.accessibilityIdentifier = "Game results"
-       
+        
         
         let action = UIAlertAction(title: model.buttonText, style: .default) { _ in
             model.completion()

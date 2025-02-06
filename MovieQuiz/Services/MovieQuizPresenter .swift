@@ -11,16 +11,15 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     
     private let statisticService: StatisticServiceProtocol!
     private var questionFactory: QuestionFactoryProtocol?
-    private weak var viewController: MovieQuizViewController?
+    private weak var viewController: MovieQuizViewControllerProtocol?
     
     private var correctAnswers = 0
     private let questionsAmount: Int = 10
     private var currentQuestionIndex: Int = 0
     private var currentQuestion: QuizQuestion?
     
-    
-    init(viewController: MovieQuizViewController) {
-        self.viewController = viewController
+    init(viewController: MovieQuizViewControllerProtocol) {
+        self.viewController = viewController as? MovieQuizViewController
         
         statisticService = StatisticService()
         
@@ -35,7 +34,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         viewController?.showNetworkError(message: message)
     }
     func didLoadDataFromServer() {
-        viewController?.activityIndicator.stopAnimating()
+        viewController?.stopActivityIndicator()
         questionFactory?.requestNextQuestion()
     }
     
@@ -111,11 +110,11 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             guard let self = self else { return }
             self.proceedToNextQuestionOrResults()
         }
-        viewController?.activityIndicator.startAnimating()
+        viewController?.startActivityIndicator()
     }
     
     func proceedToNextQuestionOrResults() {
-        viewController?.activityIndicator.stopAnimating()
+        viewController?.stopActivityIndicator()
         
         if self.isLastQuestion() {
             let text = "Вы ответили на \(correctAnswers) из 10, попробуйте еще раз!"
@@ -123,7 +122,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             let viewModel = QuizResultsViewModel(
                 title: "Этот раунд окончен!",
                 text: text,
-                buttonText: "Сыграть ещё раз")
+                buttonText: "Сыграть еще раз")
             viewController?.show(quiz: viewModel)
         } else {
             self.switchToNextQuestion()

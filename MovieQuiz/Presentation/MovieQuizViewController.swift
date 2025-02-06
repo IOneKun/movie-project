@@ -1,5 +1,5 @@
 import UIKit
-final class MovieQuizViewController: UIViewController {
+final class MovieQuizViewController: UIViewController, MovieQuizViewControllerProtocol {
     
     //MARK: - IBOutlets
     
@@ -34,6 +34,14 @@ final class MovieQuizViewController: UIViewController {
     }
     
     //MARK: - PrivateFunctions
+    
+    func startActivityIndicator() {
+        activityIndicator.startAnimating()
+    }
+    
+    func stopActivityIndicator() {
+        activityIndicator.stopAnimating()
+    }
     
     func show(quiz step: QuizStepViewModel) {
         imageView.image = step.image

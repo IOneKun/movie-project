@@ -44,10 +44,10 @@ extension StatisticService: StatisticServiceProtocol {
             let correct = storage.integer(forKey: Keys.bestGame.rawValue)
             let total = storage.integer(forKey: Keys.bestGameTotal.rawValue)
             if let savedDate = storage.object(forKey: Keys.bestGameDate.rawValue) as? Date {
-            return GameResult(correct: correct, total: total, date: savedDate)
-        } else {
-            return GameResult(correct: correct, total: total, date: Date())
-        }
+                return GameResult(correct: correct, total: total, date: savedDate)
+            } else {
+                return GameResult(correct: correct, total: total, date: Date())
+            }
         }
         set {
             storage.set(newValue.correct, forKey: Keys.bestGame.rawValue)
@@ -74,6 +74,4 @@ extension StatisticService: StatisticServiceProtocol {
             bestGame = currentGameResult
         }
     }
-    
-    
 }
