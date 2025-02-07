@@ -10,7 +10,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     @IBOutlet private var noButton: UIButton!
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     private var presenter: MovieQuizPresenter!
-
+    
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -38,7 +38,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     
     func startActivityIndicator() {
         activityIndicator.startAnimating()
-   
+        
     }
     
     func stopActivityIndicator() {
@@ -85,7 +85,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     
     func highlightImageBorder(isCorrectAnswer: Bool) {
         imageView.layer.masksToBounds = true
-        imageView.layer.borderWidth = 8D
+        imageView.layer.borderWidth = 8
         imageView.layer.borderColor = isCorrectAnswer ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
         noButton.isEnabled = false
         yesButton.isEnabled = false
@@ -93,8 +93,8 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
 }
 
 
-      
-       
+
+
             
             
             

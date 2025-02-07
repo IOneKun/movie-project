@@ -1,4 +1,3 @@
-//
 //  QuestionFactory .swift
 //  MovieQuiz
 //
@@ -121,7 +120,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
             }
             
             let text = "Рейтинг этого фильма \(randomOperator) чем \(String(format: "%.1f", randomRating))?"
-
+            
             
             let question = QuizQuestion(image: imageData,
                                         text: text,

@@ -15,7 +15,7 @@ protocol MoviesLoading {
 }
 
 struct MoviesLoader: MoviesLoading {
-
+    
     // MARK: - NetworkClient
     private let networkClient: NetworkRouting
     
@@ -31,7 +31,7 @@ struct MoviesLoader: MoviesLoading {
         }
         return url
     }
-    //MARK: - Function=
+    //MARK: - Function
     
     func loadMovies(handler: @escaping (Result<MostPopularMovies, Error>) -> Void) {
         networkClient.fetch(url: mostPopularMoviesUrl) { result in
