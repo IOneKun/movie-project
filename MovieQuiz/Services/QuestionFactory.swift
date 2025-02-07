@@ -1,4 +1,3 @@
-//
 //  QuestionFactory .swift
 //  MovieQuiz
 //
@@ -8,7 +7,6 @@
 import Foundation
 
 final class QuestionFactory: QuestionFactoryProtocol {
-    
     
     
     private let moviesLoader: MoviesLoading
@@ -91,14 +89,38 @@ final class QuestionFactory: QuestionFactoryProtocol {
             
             do {
                 imageData = try Data(contentsOf: movie.imageURL)
+                
+                if imageData.isEmpty {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.delegate?.didFailToLoadImage(for: movie)
+                    }
+                    return
+                }
             } catch {
-                print("Failed to load image")
+                DispatchQueue.main.async { [weak self] in
+                    self?.delegate?.didFailToLoadImage(for: movie)
+                    print("Failed to load image")
+                }
+                return
             }
             
+            let operators = ["больше", "меньше"]
+            let randomOperator = operators.randomElement() ?? ">"
+            let randomRating = Float.random(in: 7.9...9.3)
+            var correctAnswer = false
             let rating = Float(movie.rating) ?? 0
             
-            let text = "Рейтинг этого фильма больше чем 7?"
-            let correctAnswer = rating > 7
+            switch randomOperator {
+            case "больше":
+                correctAnswer = rating > randomRating
+            case "меньше":
+                correctAnswer = rating < randomRating
+            default:
+                break
+            }
+            
+            let text = "Рейтинг этого фильма \(randomOperator) чем \(String(format: "%.1f", randomRating))?"
+            
             
             let question = QuizQuestion(image: imageData,
                                         text: text,
