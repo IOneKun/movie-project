@@ -165,13 +165,6 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		6113423A2B701CF8003FC2A4 /* Services2 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Services2;
-			sourceTree = "<group>";
-		};
 		6FF4E9A92D293B3D00C5A514 /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -182,7 +175,6 @@
 				6FB12F292D33E67000BB89E0 /* StatisticService.swift */,
 				6F84E7A02D42B18B000E9388 /* NetworkClient.swift */,
 				6F84E7A42D42D9F4000E9388 /* MoviesLoader.swift */,
-				6FF55E422D50CBE700C69D91 /* MovieQuizPresenter .swift */,
 				6F1B4A5D2D53E221004F2192 /* MovieQuizViewControllerProtocol .swift */,
 			);
 			path = Services;
@@ -194,6 +186,7 @@
 				AD1ABAB52831907B00B3E448 /* MovieQuizViewController.swift */,
 				AD1ABAB72831907B00B3E448 /* Main.storyboard */,
 				6F2F136F2D3005CF0050D964 /* AlertPresenter.swift */,
+				6FF55E422D50CBE700C69D91 /* MovieQuizPresenter .swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -243,7 +236,6 @@
 				611342392B701CF6003FC2A4 /* Models */,
 				8F4738322848DE2A005DF65E /* Presentation */,
 				8F4738332848DE46005DF65E /* Resources */,
-				6113423A2B701CF8003FC2A4 /* Services2 */,
 			);
 			path = MovieQuiz;
 			sourceTree = "<group>";
